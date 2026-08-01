@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Kiểm Soát An Ninh Khu Công Nghiệp</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Firebase Web SDK (v10 Modular) -->
+    <script type="importmap">
+    {
+      "imports": {
+        "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+        "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"
+      }
+    }
+    </script>
+</head>
+<body class="bg-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Navbar -->
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600 p-2 rounded-lg">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight uppercase tracking-wider">IZ-SECURITY</h1>
+                    <p class="text-xs text-slate-400">An Ninh & Kiểm Soát Khu Công Nghiệp</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Hệ thống Trực tuyến
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Left Column: Thông tin & Tính năng An ninh -->
+        <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+                <i data-lucide="building-2" class="w-4 h-4"></i> Giải pháp An ninh KCN Việt Nam
+            </div>
+            <h2 class="text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight">
+                Hệ thống Quản lý & Giám sát An ninh Tự động
+            </h2>
+            <p class="text-slate-600 text-base leading-relaxed">
+                Nền tảng hỗ trợ Ban quản lý KCN, Lực lượng Bảo vệ và Các Doanh nghiệp trong KCN đồng bộ dữ liệu ra/vào, tuần tra ban đêm và xử lý sự cố an ninh khẩn cấp.
+            </p>
+
+            <!-- Grid Tính năng -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                    <div class="p-2 bg-blue-50 text-blue-600 rounded-lg shrink-0">
+                        <i data-lucide="scan-line" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-800 text-sm">Kiểm Soát Cổng Cảng/KCN</h3>
+                        <p class="text-xs text-slate-500 mt-1">Ghi nhận thông tin xe container, công nhân và khách đăng nhập theo ca.</p>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                    <div class="p-2 bg-amber-50 text-amber-600 rounded-lg shrink-0">
+                        <i data-lucide="siren" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-800 text-sm">Cảnh Báo Sự Cố Khẩn Cấp</h3>
+                        <p class="text-xs text-slate-500 mt-1">Kích hoạt thông báo cháy, mất an ninh trật tự tới toàn bộ các chốt gác.</p>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                    <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg shrink-0">
+                        <i data-lucide="file-check-2" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-800 text-sm">Quản Lý Nhà Thầu</h3>
+                        <p class="text-xs text-slate-500 mt-1">Duyệt danh sách thi công ngắn hạn và giấy phép đăng ký ra/vào.</p>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                    <div class="p-2 bg-purple-50 text-purple-600 rounded-lg shrink-0">
+                        <i data-lucide="map-pin-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-800 text-sm">Điểm Danh Tuần Tra</h3>
+                        <p class="text-xs text-slate-500 mt-1">Xác nhận vị trí chốt gác và lộ trình tuần tra theo định vị GPS.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Form Đăng nhập & Bảng Điều Khiển -->
+        <div class="lg:col-span-5">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-slate-200">
+                
+                <!-- State 1: Chuyện Đăng nhập -->
+                <div id="login-section" class="space-y-6">
+                    <div class="text-center">
+                        <h3 class="text-xl font-bold text-slate-800">Cổng Đăng Nhập Cán Bộ / Bảo Vệ</h3>
+                        <p class="text-xs text-slate-500 mt-1">Sử dụng tài khoản được ủy quyền để truy cập ca trực</p>
+                    </div>
+
+                    <!-- Alert Box -->
+                    <div id="auth-alert" class="hidden p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg"></div>
+
+                    <!-- Login Buttons -->
+                    <div class="space-y-3">
+                        <button id="btn-google-login" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border border-slate-300 rounded-xl font-medium text-slate-700 hover:bg-slate-50 transition shadow-sm">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                            </svg>
+                            Đăng nhập bằng Google
+                        </button>
+
+                        <button id="btn-facebook-login" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#1877F2] hover:bg-[#166fe5] text-white rounded-xl font-medium transition shadow-sm">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            Đăng nhập bằng Facebook
+                        </button>
+                    </div>
+
+                    <div class="relative flex py-2 items-center">
+                        <div class="flex-grow border-t border-slate-200"></div>
+                        <span class="flex-shrink mx-4 text-xs text-slate-400">Lưu ý an ninh</span>
+                        <div class="flex-grow border-t border-slate-200"></div>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-lg text-xs text-slate-500 space-y-1 border border-slate-100">
+                        <p class="flex items-center gap-1.5 font-medium text-slate-700">
+                            <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-500"></i> Quy định bảo mật:
+                        </p>
+                        <p>• Chỉ tài khoản đã đăng ký trong danh sách Ca trực mới có quyền duyệt khách.</p>
+                        <p>• Tuyệt đối không chia sẻ phiên đăng nhập cho nhân sự ngoài ca.</p>
+                    </div>
+                </div>
+
+                <!-- State 2: Đã Đăng nhập (User Profile & Quick Actions) -->
+                <div id="user-section" class="hidden space-y-6">
+                    <div class="flex items-center space-x-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <img id="user-avatar" src="" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-blue-600">
+                        <div class="overflow-hidden">
+                            <h4 id="user-name" class="font-bold text-slate-800 text-sm truncate">...</h4>
+                            <p id="user-email" class="text-xs text-slate-500 truncate">...</p>
+                            <span class="inline-block mt-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-semibold rounded">Cán bộ Trực cổng</span>
+                        </div>
+                    </div>
+
+                    <!-- Bảng Thao tác Nhanh -->
+                    <div class="space-y-2">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Thao tác Ca trực</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button class="p-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold flex flex-col items-center gap-1 transition">
+                                <i data-lucide="qr-code" class="w-5 h-5"></i> Quét mã Khách
+                            </button>
+                            <button class="p-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex flex-col items-center gap-1 transition">
+                                <i data-lucide="truck" class="w-5 h-5"></i> Xe Container
+                            </button>
+                            <button class="p-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex flex-col items-center gap-1 transition">
+                                <i data-lucide="clipboard-list" class="w-5 h-5"></i> Sổ Sách Ca Trực
+                            </button>
+                            <button class="p-3 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-xs font-semibold flex flex-col items-center gap-1 transition">
+                                <i data-lucide="alert-triangle" class="w-5 h-5"></i> Báo Sự Cố
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="btn-logout" class="w-full py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl font-medium text-xs transition flex items-center justify-center gap-2">
+                        <i data-lucide="log-out" class="w-4 h-4"></i> Đăng xuất khỏi ca
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-4 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p>© 2026 Ban Quản Lý An Ninh Khu Công Nghiệp. All rights reserved.</p>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:text-white">Hotline Khẩn Cấp: 1900 xxxx</a>
+                <a href="#" class="hover:text-white">Quy Định Ra Vào KCN</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic Firebase Authentication -->
+    <script type="module">
+        import { initializeApp } from "firebase/app";
+        import { 
+            getAuth, 
+            signInWithPopup, 
+            GoogleAuthProvider, 
+            FacebookAuthProvider, 
+            onAuthStateChanged, 
+            signOut 
+        } from "firebase/auth";
+
+        // Cấu hình Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAdVQH5MK3xZv1B4BmmAOinSsTV_92PwJA",
+            authDomain: "project-doidoi.firebaseapp.com",
+            databaseURL: "https://project-doidoi-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "project-doidoi",
+            storageBucket: "project-doidoi.firebasestorage.app",
+            messagingSenderId: "849773176716",
+            appId: "1:849773176716:web:a6b9b0af8124a444d058a9"
+        };
+
+        // Khởi tạo Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // DOM Elements
+        const loginSection = document.getElementById('login-section');
+        const userSection = document.getElementById('user-section');
+        const btnGoogle = document.getElementById('btn-google-login');
+        const btnFacebook = document.getElementById('btn-facebook-login');
+        const btnLogout = document.getElementById('btn-logout');
+        const authAlert = document.getElementById('auth-alert');
+
+        const userName = document.getElementById('user-name');
+        const userEmail = document.getElementById('user-email');
+        const userAvatar = document.getElementById('user-avatar');
+
+        // Hiển thị thông báo lỗi
+        function showError(message) {
+            authAlert.textContent = message;
+            authAlert.classList.remove('hidden');
+        }
+
+        // Đăng nhập Google
+        btnGoogle.addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                showError("Đăng nhập Google thất bại: " + error.message);
+            }
+        });
+
+        // Đăng nhập Facebook
+        btnFacebook.addEventListener('click', async () => {
+            const provider = new FacebookAuthProvider();
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                showError("Đăng nhập Facebook thất bại: " + error.message);
+            }
+        });
+
+        // Đăng xuất
+        btnLogout.addEventListener('click', async () => {
+            await signOut(auth);
+        });
+
+        // Lắng nghe trạng thái Đăng nhập
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Đã đăng nhập
+                loginSection.classList.add('hidden');
+                userSection.classList.remove('hidden');
+
+                userName.textContent = user.displayName || "Cán bộ An Ninh";
+                userEmail.textContent = user.email || "Không có email";
+                userAvatar.src = user.photoURL || "https://via.placeholder.com/150";
+            } else {
+                // Chưa đăng nhập
+                loginSection.classList.remove('hidden');
+                userSection.classList.add('hidden');
+                authAlert.classList.add('hidden');
+            }
+        });
+
+        // Khởi tạo icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
