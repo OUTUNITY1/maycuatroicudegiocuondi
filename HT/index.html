@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ <title>ElectroData - Quản lý dữ liệu người dùng</title>
+ <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3659/3659899.png">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+ <style>
+ :root {
+ --bg: #020617;
+ --sidebar: #0f172a;
+ --card: #1e293b;
+ --primary: #6366f1;
+ --primary-hover: #4f46e5;
+ --text: #f8fafc;
+ --text-muted: #94a3b8;
+ --border: #334155;
+ --success: #10b981;
+ }
+
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+
+ body {
+ font-family: 'Inter', sans-serif;
+ background: var(--bg);
+ color: var(--text);
+ min-height: 100vh;
+ display: flex;
+ }
+
+ /* ===== SIDEBAR ===== */
+ .sidebar {
+ width: 260px;
+ background: var(--sidebar);
+ border-right: 1px solid var(--border);
+ padding: 20px 16px;
+ display: flex;
+ flex-direction: column;
+ position: fixed;
+ height: 100vh;
+ z-index: 50;
+ transition: transform 0.3s;
+ }
+
+ .sidebar.hidden-mobile {
+ transform: translateX(-100%);
+ }
+
+ .logo {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ font-size: 1.25rem;
+ font-weight: 700;
+ margin-bottom: 30px;
+ color: var(--text);
+ }
+ .logo i { color: var(--primary); }
+
+ .user-card {
+ background: var(--card);
+ border-radius: 12px;
+ padding: 14px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ margin-bottom: 24px;
+ border: 1px solid var(--border);
+ }
+ .user-card img {
+ width: 42px; height: 42px;
+ border-radius: 50%;
+ border: 2px solid var(--primary);
+ }
+ .user-card .info { overflow: hidden; }
+ .user-card .name {
+ font-weight: 600;
+ font-size: 0.95rem;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ }
+ .user-card .email {
+ font-size: 0.75rem;
+ color: var(--text-muted);
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ }
+
+ .menu { flex: 1; }
+ .menu-item {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ padding: 12px 14px;
+ border-radius: 10px;
+ color: var(--text-muted);
+ cursor: pointer;
+ margin-bottom: 4px;
+ transition: 0.2s;
+ font-size: 0.95rem;
+ }
+ .menu-item:hover, .menu-item.active {
+ background: rgba(99, 102, 241, 0.15);
+ color: var(--primary);
+ }
+ .menu-item i { width: 20px; text-align: center; }
+
+ .logout-btn {
+ margin-top: auto;
+ width: 100%;
+ justify-content: center;
+ }
+
+ /* ===== MAIN CONTENT ===== */
+ .main {
+ flex: 1;
+ margin-left: 260px;
+ padding: 24px 20px 40px;
+ max-width: 100%;
+ }
+
+ .topbar {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 28px;
+ gap: 12px;
+ }
+
+ .topbar h1 {
+ font-size: 1.5rem;
+ font-weight: 700;
+ }
+
+ .menu-toggle {
+ display: none;
+ background: var(--card);
+ border: 1px solid var(--border);
+ color: var(--text);
+ width: 42px; height: 42px;
+ border-radius: 10px;
+ font-size: 1.2rem;
+ cursor: pointer;
+ }
+
+ /* Cards */
+ .stats {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+ gap: 14px;
+ margin-bottom: 28px;
+ }
+ .stat-card {
+ background: var(--card);
+ border: 1px solid var(--border);
+ border-radius: 14px;
+ padding: 18px;
+ text-align: center;
+ }
+ .stat-card i {
+ font-size: 1.5rem;
+ color: var(--primary);
+ margin-bottom: 8px;
+ }
+ .stat-card .value {
+ font-size: 1.4rem;
+ font-weight: 700;
+ }
+ .stat-card .label {
+ font-size: 0.8rem;
+ color: var(--text-muted);
+ margin-top: 4px;
+ }
+
+ /* Form Card */
+ .form-card {
+ background: var(--card);
+ border: 1px solid var(--border);
+ border-radius: 16px;
+ padding: 24px;
+ margin-bottom: 24px;
+ }
+ .form-card h2 {
+ font-size: 1.2rem;
+ margin-bottom: 20px;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+ .form-card h2 i { color: var(--primary); }
+
+ .form-group {
+ margin-bottom: 18px;
+ }
+ .form-group label {
+ display: block;
+ font-size: 0.9rem;
+ color: var(--text-muted);
+ margin-bottom: 6px;
+ }
+ .form-group input,
+ .form-group textarea {
+ width: 100%;
+ padding: 12px 14px;
+ background: #0f172a;
+ border: 1px solid var(--border);
+ border-radius: 10px;
+ color: var(--text);
+ font-size: 0.95rem;
+ font-family: inherit;
+ }
+ .form-group textarea {
+ min-height: 100px;
+ resize: vertical;
+ }
+
+ .tags {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 8px;
+ margin-top: 8px;
+ }
+ .tag {
+ background: #0f172a;
+ border: 1px solid var(--border);
+ padding: 7px 12px;
+ border-radius: 20px;
+ font-size: 0.85rem;
+ cursor: pointer;
+ display: flex;
+ align-items: center;
+ gap: 6px;
+ transition: 0.2s;
+ }
+ .tag input { accent-color: var(--primary); }
+ .tag:has(input:checked) {
+ background: rgba(99, 102, 241, 0.2);
+ border-color: var(--primary);
+ color: #a5b4fc;
+ }
+
+ .btn {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ padding: 12px 20px;
+ border-radius: 10px;
+ font-weight: 600;
+ font-size: 0.95rem;
+ cursor: pointer;
+ border: none;
+ transition: 0.2s;
+ }
+ .btn-primary {
+ background: var(--primary);
+ color: white;
+ }
+ .btn-primary:hover { background: var(--primary-hover); }
+ .btn-outline {
+ background: transparent;
+ border: 1px solid var(--border);
+ color: var(--text);
+ }
+
+ .save-msg {
+ margin-top: 14px;
+ color: var(--success);
+ font-size: 0.9rem;
+ display: none;
+ }
+
+ /* Data Preview */
+ .preview-card {
+ background: var(--card);
+ border: 1px solid var(--border);
+ border-radius: 16px;
+ padding: 24px;
+ }
+ .preview-card h2 {
+ font-size: 1.2rem;
+ margin-bottom: 16px;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+ .preview-item {
+ display: flex;
+ justify-content: space-between;
+ padding: 12px 0;
+ border-bottom: 1px solid var(--border);
+ font-size: 0.95rem;
+ }
+ .preview-item:last-child { border-bottom: none; }
+ .preview-item .label { color: var(--text-muted); }
+ .preview-item .value { font-weight: 500; text-align: right; max-width: 60%; word-break: break-word; }
+
+ /* Login Screen */
+ .login-screen {
+ position: fixed;
+ inset: 0;
+ background: var(--bg);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ z-index: 100;
+ flex-direction: column;
+ gap: 20px;
+ padding: 20px;
+ text-align: center;
+ }
+ .login-screen.hidden { display: none; }
+ .login-box {
+ background: var(--card);
+ border: 1px solid var(--border);
+ border-radius: 20px;
+ padding: 40px 30px;
+ max-width: 380px;
+ width: 100%;
+ }
+ .login-box i {
+ font-size: 3rem;
+ color: var(--primary);
+ margin-bottom: 16px;
+ }
+ .login-box h2 { margin-bottom: 8px; }
+ .login-box p { color: var(--text-muted); margin-bottom: 24px; font-size: 0.95rem; }
+
+ /* Loading */
+ #loading {
+ position: fixed;
+ inset: 0;
+ background: rgba(2,6,23,0.95);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ z-index: 200;
+ }
+ .spinner {
+ width: 40px; height: 40px;
+ border: 3px solid var(--border);
+ border-top-color: var(--primary);
+ border-radius: 50%;
+ animation: spin 0.7s linear infinite;
+ }
+ @keyframes spin { to { transform: rotate(360deg); } }
+
+ /* Mobile */
+ @media (max-width: 768px) {
+ .sidebar {
+ transform: translateX(-100%);
+ }
+ .sidebar.show {
+ transform: translateX(0);
+ }
+ .main {
+ margin-left: 0;
+ }
+ .menu-toggle {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ }
+ .overlay {
+ display: none;
+ position: fixed;
+ inset: 0;
+ background: rgba(0,0,0,0.5);
+ z-index: 40;
+ }
+ .overlay.show { display: block; }
+ }
+ </style>
+</head>
+<body>
+
+ <div id="loading"><div class="spinner"></div></div>
+
+ <!-- Login Screen -->
+ <div id="loginScreen" class="login-screen">
+ <div class="login-box">
+ <i class="fas fa-database"></i>
+ <h2>ElectroData</h2>
+ <p>Đăng nhập để xem & lưu dữ liệu sản xuất thiết bị điện tử theo UID của bạn</p>
+ <button id="loginBtn" class="btn btn-primary" style="width:100%; justify-content:center;">
+ <i class="fab fa-google"></i> Đăng nhập với Google
+ </button>
+ </div>
+ </div>
+
+ <!-- Overlay mobile -->
+ <div id="overlay" class="overlay"></div>
+
+ <!-- Sidebar -->
+ <aside class="sidebar" id="sidebar">
+ <div class="logo">
+ <i class="fas fa-microchip"></i>
+ <span>ElectroData</span>
+ </div>
+
+ <div class="user-card" id="sidebarUser">
+ <img id="sideAvatar" src="" alt="avatar">
+ <div class="info">
+ <div class="name" id="sideName">User</div>
+ <div class="email" id="sideEmail">email@gmail.com</div>
+ </div>
+ </div>
+
+ <div class="menu">
+ <div class="menu-item active">
+ <i class="fas fa-user-edit"></i>
+ <span>Hồ sơ & Dữ liệu</span>
+ </div>
+ <div class="menu-item">
+ <i class="fas fa-building"></i>
+ <span>Công ty sản xuất</span>
+ </div>
+ <div class="menu-item">
+ <i class="fas fa-chart-bar"></i>
+ <span>Thống kê</span>
+ </div>
+ </div>
+
+ <button id="logoutBtn" class="btn btn-outline logout-btn">
+ <i class="fas fa-sign-out-alt"></i> Đăng xuất
+ </button>
+ </aside>
+
+ <!-- Main Content -->
+ <main class="main" id="mainContent" style="display:none;">
+ <div class="topbar">
+ <button class="menu-toggle" id="menuToggle">
+ <i class="fas fa-bars"></i>
+ </button>
+ <h1>Quản lý dữ liệu cá nhân</h1>
+ </div>
+
+ <!-- Stats -->
+ <div class="stats">
+ <div class="stat-card">
+ <i class="fas fa-id-card"></i>
+ <div class="value" id="statUid">—</div>
+ <div class="label">UID (rút gọn)</div>
+ </div>
+ <div class="stat-card">
+ <i class="fas fa-tags"></i>
+ <div class="value" id="statFields">0</div>
+ <div class="label">Lĩnh vực quan tâm</div>
+ </div>
+ <div class="stat-card">
+ <i class="fas fa-clock"></i>
+ <div class="value" id="statUpdate">—</div>
+ <div class="label">Cập nhật lần cuối</div>
+ </div>
+ </div>
+
+ <!-- Form lưu dữ liệu -->
+ <div class="form-card">
+ <h2><i class="fas fa-save"></i> Chỉnh sửa & Lưu dữ liệu</h2>
+
+ <form id="dataForm">
+ <div class="form-group">
+ <label>Họ và tên</label>
+ <input type="text" id="fullName" placeholder="Nhập họ tên">
+ </div>
+
+ <div class="form-group">
+ <label>Công ty / Tổ chức quan tâm</label>
+ <input type="text" id="companyInterest" placeholder="Samsung, Foxconn, Intel...">
+ </div>
+
+ <div class="form-group">
+ <label>Lĩnh vực sản xuất quan tâm</label>
+ <div class="tags">
+ <label class="tag"><input type="checkbox" name="fields" value="semiconductor"> Bán dẫn / Chip</label>
+ <label class="tag"><input type="checkbox" name="fields" value="consumer"> Consumer Electronics</label>
+ <label class="tag"><input type="checkbox" name="fields" value="automotive"> Điện tử Ô tô</label>
+ <label class="tag"><input type="checkbox" name="fields" value="industrial"> Công nghiệp</label>
+ <label class="tag"><input type="checkbox" name="fields" value="medical"> Thiết bị Y tế</label>
+ <label class="tag"><input type="checkbox" name="fields" value="pcb"> PCB & Lắp ráp</label>
+ </div>
+ </div>
+
+ <div class="form-group">
+ <label>Ghi chú về sản xuất / công ty</label>
+ <textarea id="notes" placeholder="Ghi chú của bạn về các công ty sản xuất thiết bị điện tử..."></textarea>
+ </div>
+
+ <button type="submit" class="btn btn-primary">
+ <i class="fas fa-cloud-upload-alt"></i> Lưu dữ liệu theo UID
+ </button>
+ <div id="saveMsg" class="save-msg">
+ <i class="fas fa-check-circle"></i> Đã lưu thành công vào Realtime Database!
+ </div>
+ </form>
+ </div>
+
+ <!-- Preview dữ liệu đã lưu -->
+ <div class="preview-card">
+ <h2><i class="fas fa-eye"></i> Dữ liệu hiện đang lưu</h2>
+ <div class="preview-item">
+ <span class="label">Họ tên</span>
+ <span class="value" id="previewName">—</span>
+ </div>
+ <div class="preview-item">
+ <span class="label">Công ty quan tâm</span>
+ <span class="value" id="previewCompany">—</span>
+ </div>
+ <div class="preview-item">
+ <span class="label">Lĩnh vực</span>
+ <span class="value" id="previewFields">—</span>
+ </div>
+ <div class="preview-item">
+ <span class="label">Ghi chú</span>
+ <span class="value" id="previewNotes">—</span>
+ </div>
+ <div class="preview-item">
+ <span class="label">Cập nhật lúc</span>
+ <span class="value" id="previewTime">—</span>
+ </div>
+ </div>
+ </main>
+
+ <!-- Firebase -->
+ <script type="module">
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+ import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+ const firebaseConfig = {
+ apiKey: "AIzaSyASfKSM4k9PVqGSu2ycd5Uv1ax0vbScg0I",
+ authDomain: "soloskill.firebaseapp.com",
+ databaseURL: "https://soloskill-default-rtdb.europe-west1.firebasedatabase.app",
+ projectId: "soloskill",
+ storageBucket: "soloskill.firebasestorage.app",
+ messagingSenderId: "959816905162",
+ appId: "1:959816905162:web:2a7c6b8dd0cb985a71df33",
+ measurementId: "G-05TCE6B63Y"
+ };
+
+ const app = initializeApp(firebaseConfig);
+ const auth = getAuth(app);
+ const db = getDatabase(app);
+ const provider = new GoogleAuthProvider();
+
+ // DOM
+ const loading = document.getElementById('loading');
+ const loginScreen = document.getElementById('loginScreen');
+ const mainContent = document.getElementById('mainContent');
+ const loginBtn = document.getElementById('loginBtn');
+ const logoutBtn = document.getElementById('logoutBtn');
+ const menuToggle = document.getElementById('menuToggle');
+ const sidebar = document.getElementById('sidebar');
+ const overlay = document.getElementById('overlay');
+
+ // Mobile menu
+ menuToggle.addEventListener('click', () => {
+ sidebar.classList.toggle('show');
+ overlay.classList.toggle('show');
+ });
+ overlay.addEventListener('click', () => {
+ sidebar.classList.remove('show');
+ overlay.classList.remove('show');
+ });
+
+ // Login
+ loginBtn.addEventListener('click', async () => {
+ try {
+ await signInWithPopup(auth, provider);
+ } catch (err) {
+ alert("Lỗi đăng nhập: " + err.message);
+ }
+ });
+
+ // Logout
+ logoutBtn.addEventListener('click', () => signOut(auth));
+
+ // Auth state
+ onAuthStateChanged(auth, async (user) => {
+ loading.classList.add('hidden');
+
+ if (user) {
+ loginScreen.classList.add('hidden');
+ mainContent.style.display = 'block';
+
+ // Sidebar user
+ document.getElementById('sideAvatar').src = user.photoURL || 'https://via.placeholder.com/42';
+ document.getElementById('sideName').textContent = user.displayName || 'User';
+ document.getElementById('sideEmail').textContent = user.email;
+
+ // Stats UID
+ document.getElementById('statUid').textContent = user.uid.slice(0, 8) + '...';
+
+ // Load data
+ await loadData(user.uid);
+ } else {
+ loginScreen.classList.remove('hidden');
+ mainContent.style.display = 'none';
+ sidebar.classList.remove('show');
+ overlay.classList.remove('show');
+ }
+ });
+
+ // Load dữ liệu
+ async function loadData(uid) {
+ try {
+ const snap = await get(child(ref(db), `users/${uid}`));
+ if (snap.exists()) {
+ const data = snap.val();
+
+ // Form
+ document.getElementById('fullName').value = data.fullName || '';
+ document.getElementById('companyInterest').value = data.companyInterest || '';
+ document.getElementById('notes').value = data.notes || '';
+
+ document.querySelectorAll('input[name="fields"]').forEach(cb => {
+ cb.checked = data.fields?.includes(cb.value) || false;
+ });
+
+ // Preview
+ document.getElementById('previewName').textContent = data.fullName || '—';
+ document.getElementById('previewCompany').textContent = data.companyInterest || '—';
+ document.getElementById('previewFields').textContent = data.fields?.join(', ') || '—';
+ document.getElementById('previewNotes').textContent = data.notes || '—';
+ document.getElementById('previewTime').textContent = data.lastUpdated 
+ ? new Date(data.lastUpdated).toLocaleString('vi-VN') 
+ : '—';
+
+ // Stats
+ document.getElementById('statFields').textContent = data.fields?.length || 0;
+ document.getElementById('statUpdate').textContent = data.lastUpdated 
+ ? new Date(data.lastUpdated).toLocaleDateString('vi-VN') 
+ : '—';
+ }
+ } catch (err) {
+ console.error(err);
+ }
+ }
+
+ // Lưu dữ liệu
+ document.getElementById('dataForm').addEventListener('submit', async (e) => {
+ e.preventDefault();
+ const user = auth.currentUser;
+ if (!user) return;
+
+ const fields = [...document.querySelectorAll('input[name="fields"]:checked')].map(c => c.value);
+
+ const data = {
+ fullName: document.getElementById('fullName').value.trim(),
+ companyInterest: document.getElementById('companyInterest').value.trim(),
+ fields,
+ notes: document.getElementById('notes').value.trim(),
+ email: user.email,
+ photoURL: user.photoURL || '',
+ lastUpdated: new Date().toISOString()
+ };
+
+ try {
+ await set(ref(db, `users/${user.uid}`), data);
+ 
+ // Cập nhật preview ngay
+ document.getElementById('previewName').textContent = data.fullName || '—';
+ document.getElementById('previewCompany').textContent = data.companyInterest || '—';
+ document.getElementById('previewFields').textContent = fields.join(', ') || '—';
+ document.getElementById('previewNotes').textContent = data.notes || '—';
+ document.getElementById('previewTime').textContent = new Date().toLocaleString('vi-VN');
+ document.getElementById('statFields').textContent = fields.length;
+ document.getElementById('statUpdate').textContent = new Date().toLocaleDateString('vi-VN');
+
+ const msg = document.getElementById('saveMsg');
+ msg.style.display = 'block';
+ setTimeout(() => msg.style.display = 'none', 3000);
+ } catch (err) {
+ alert("Lỗi lưu: " + err.message);
+ }
+ });
+ </script>
+</body>
+</html>
