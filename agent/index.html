@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Agents - Vấn đề hiện nay & Lưu dữ liệu Firebase</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #334155;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #a5b4fc; }
+    .subtitle { color: var(--muted); }
+    .auth-section {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0.4rem;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn:hover { transform: translateY(-2px); opacity: 0.95; }
+    .btn-google { background: #fff; color: #333; }
+    .btn-facebook { background: #1877f2; color: #fff; }
+    .btn-logout { background: #ef4444; color: #fff; }
+    .btn-save { background: var(--primary); color: #fff; width: 100%; }
+    .user-info { margin-top: 1rem; color: #a5b4fc; }
+    .content-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .content-card h2 { color: #a5b4fc; margin-bottom: 1rem; font-size: 1.4rem; }
+    .content-card ul { padding-left: 1.4rem; margin: 1rem 0; }
+    .content-card li { margin-bottom: 0.6rem; }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.4rem; color: var(--muted); font-size: 0.9rem; }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: var(--text);
+      font-size: 1rem;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    .data-list { margin-top: 1.5rem; }
+    .data-item {
+      background: #0f172a;
+      border-left: 4px solid var(--primary);
+      padding: 1rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 0.8rem;
+    }
+    .data-item .meta { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; }
+    .hidden { display: none !important; }
+    .status { text-align: center; padding: 0.8rem; border-radius: 8px; margin: 1rem 0; }
+    .status.success { background: #065f46; color: #a7f3d0; }
+    .status.error { background: #7f1d1d; color: #fecaca; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🤖 AI Agents – Vấn đề hiện nay</h1>
+      <p class="subtitle">Tìm hiểu & đóng góp ý kiến về các thách thức của AI Agents</p>
+    </header>
+
+    <!-- Auth Section -->
+    <div class="auth-section" id="authSection">
+      <p id="loginPrompt">Đăng nhập để đóng góp dữ liệu mới</p>
+      <div id="loginButtons">
+        <button class="btn btn-google" id="btnGoogle">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Đăng nhập Google
+        </button>
+        <button class="btn btn-facebook" id="btnFacebook">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Đăng nhập Facebook
+        </button>
+      </div>
+      <div id="userInfo" class="user-info hidden">
+        <p>Xin chào, <strong id="userName"></strong></p>
+        <button class="btn btn-logout" id="btnLogout">Đăng xuất</button>
+      </div>
+    </div>
+
+    <!-- Nội dung về AI Agents -->
+    <div class="content-card">
+      <h2>Các vấn đề lớn của AI Agents hiện nay</h2>
+      <p>
+        AI Agents (tác nhân AI tự chủ) đang phát triển rất nhanh, nhưng vẫn tồn tại nhiều thách thức quan trọng:
+      </p>
+      <ul>
+        <li><strong>Hallucination &amp; độ tin cậy:</strong> Agent dễ bịa thông tin hoặc đưa ra kết luận sai khi dữ liệu không đầy đủ.</li>
+        <li><strong>Alignment &amp; kiểm soát:</strong> Khó đảm bảo agent luôn hành động đúng mục tiêu của con người, đặc biệt khi được quyền tự quyết cao.</li>
+        <li><strong>An toàn &amp; lạm dụng:</strong> Agent có thể bị lợi dụng để thực hiện hành vi độc hại (phishing, tấn động tự động, tấn công mạng…).</li>
+        <li><strong>Quyền riêng tư &amp; dữ liệu:</strong> Agent thường cần truy cập nhiều nguồn dữ liệu nhạy cảm, tăng rủi ro rò rỉ thông tin.</li>
+        <li><strong>Chi phí &amp; hiệu suất:</strong> Chạy nhiều bước suy luận + tool calling tốn kém token và latency cao.</li>
+        <li><strong>Tính minh bạch:</strong> Khó giải thích được tại sao agent đưa ra quyết định cụ thể (black-box).</li>
+        <li><strong>Phối hợp đa agent:</strong> Khi nhiều agent làm việc cùng nhau dễ xảy ra xung đột mục tiêu hoặc vòng lặp vô tận.</li>
+      </ul>
+      <p style="margin-top:1rem;color:var(--muted);font-size:0.95rem">
+        Mẫu văn bản trên được dùng làm cơ sở. Bạn có thể thêm ý kiến / vấn đề mới sau khi đăng nhập.
+      </p>
+    </div>
+
+    <!-- Form lưu dữ liệu (chỉ hiện khi đã login) -->
+    <div class="content-card hidden" id="formSection">
+      <h2>Thêm vấn đề / ý kiến mới</h2>
+      <form id="dataForm">
+        <div class="form-group">
+          <label for="title">Tiêu đề vấn đề</label>
+          <input type="text" id="title" placeholder="Ví dụ: Rủi ro khi agent tự gọi API" required />
+        </div>
+        <div class="form-group">
+          <label for="category">Danh mục</label>
+          <select id="category">
+            <option value="Hallucination">Hallucination &amp; độ tin cậy</option>
+            <option value="Alignment">Alignment &amp; kiểm soát</option>
+            <option value="Safety">An toàn &amp; lạm dụng</option>
+            <option value="Privacy">Quyền riêng tư</option>
+            <option value="Cost">Chi phí &amp; hiệu suất</option>
+            <option value="Transparency">Tính minh bạch</option>
+            <option value="Multi-Agent">Phối hợp đa agent</option>
+            <option value="Other">Khác</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="description">Mô tả chi tiết (dựa trên mẫu văn bản có sẵn)</label>
+          <textarea id="description" placeholder="Mô tả vấn đề, hậu quả, hoặc giải pháp đề xuất..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-save">Lưu vào Firebase</button>
+      </form>
+      <div id="statusMsg" class="status hidden"></div>
+    </div>
+
+    <!-- Danh sách dữ liệu đã lưu -->
+    <div class="content-card">
+      <h2>Dữ liệu đã đóng góp</h2>
+      <div id="dataList" class="data-list">
+        <p style="color:var(--muted)">Đang tải...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs (v10 modular via CDN) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      FacebookAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import {
+      getDatabase,
+      ref,
+      push,
+      set,
+      onValue,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyASfKSM4k9PVqGSu2ycd5Uv1ax0vbScg0I",
+      authDomain: "soloskill.firebaseapp.com",
+      databaseURL: "https://soloskill-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "soloskill",
+      storageBucket: "soloskill.firebasestorage.app",
+      messagingSenderId: "959816905162",
+      appId: "1:959816905162:web:fe1db8d86e63f23271df33",
+      measurementId: "G-Y1Z5HSRNZV"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const googleProvider = new GoogleAuthProvider();
+    const facebookProvider = new FacebookAuthProvider();
+
+    // DOM elements
+    const btnGoogle = document.getElementById("btnGoogle");
+    const btnFacebook = document.getElementById("btnFacebook");
+    const btnLogout = document.getElementById("btnLogout");
+    const loginButtons = document.getElementById("loginButtons");
+    const userInfo = document.getElementById("userInfo");
+    const userName = document.getElementById("userName");
+    const loginPrompt = document.getElementById("loginPrompt");
+    const formSection = document.getElementById("formSection");
+    const dataForm = document.getElementById("dataForm");
+    const statusMsg = document.getElementById("statusMsg");
+    const dataList = document.getElementById("dataList");
+
+    // Auth state
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginButtons.classList.add("hidden");
+        loginPrompt.classList.add("hidden");
+        userInfo.classList.remove("hidden");
+        formSection.classList.remove("hidden");
+        userName.textContent = user.displayName || user.email || "Người dùng";
+      } else {
+        loginButtons.classList.remove("hidden");
+        loginPrompt.classList.remove("hidden");
+        userInfo.classList.add("hidden");
+        formSection.classList.add("hidden");
+      }
+    });
+
+    // Login handlers
+    btnGoogle.addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, googleProvider);
+      } catch (err) {
+        showStatus("Lỗi đăng nhập Google: " + err.message, false);
+      }
+    });
+
+    btnFacebook.addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, facebookProvider);
+      } catch (err) {
+        showStatus("Lỗi đăng nhập Facebook: " + err.message, false);
+      }
+    });
+
+    btnLogout.addEventListener("click", () => signOut(auth));
+
+    // Save data
+    dataForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (!user) {
+        showStatus("Vui lòng đăng nhập trước!", false);
+        return;
+      }
+
+      const title = document.getElementById("title").value.trim();
+      const category = document.getElementById("category").value;
+      const description = document.getElementById("description").value.trim();
+
+      const newData = {
+        title,
+        category,
+        description,
+        author: user.displayName || user.email,
+        uid: user.uid,
+        createdAt: serverTimestamp()
+      };
+
+      try {
+        const newRef = push(ref(db, "ai_agent_issues"));
+        await set(newRef, newData);
+        showStatus("✅ Đã lưu thành công vào Firebase!", true);
+        dataForm.reset();
+      } catch (err) {
+        showStatus("Lỗi lưu dữ liệu: " + err.message, false);
+      }
+    });
+
+    // Load data realtime
+    const issuesRef = ref(db, "ai_agent_issues");
+    onValue(issuesRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) {
+        dataList.innerHTML = `<p style="color:var(--muted)">Chưa có dữ liệu nào. Hãy đăng nhập và thêm vấn đề đầu tiên!</p>`;
+        return;
+      }
+
+      const items = Object.entries(data)
+        .map(([id, item]) => ({ id, ...item }))
+        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+      dataList.innerHTML = items.map(item => `
+        <div class="data-item">
+          <strong>${escapeHtml(item.title)}</strong>
+          <span style="background:#334155;padding:2px 8px;border-radius:4px;font-size:0.75rem;margin-left:8px">${escapeHtml(item.category)}</span>
+          <p style="margin-top:0.5rem">${escapeHtml(item.description)}</p>
+          <div class="meta">
+            bởi ${escapeHtml(item.author || "Ẩn danh")} • ${formatTime(item.createdAt)}
+          </div>
+        </div>
+      `).join("");
+    });
+
+    function showStatus(msg, success) {
+      statusMsg.textContent = msg;
+      statusMsg.className = "status " + (success ? "success" : "error");
+      statusMsg.classList.remove("hidden");
+      setTimeout(() => statusMsg.classList.add("hidden"), 4000);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function formatTime(ts) {
+      if (!ts) return "vừa xong";
+      const d = new Date(ts);
+      return d.toLocaleString("vi-VN");
+    }
+  </script>
+</body>
+</html>
