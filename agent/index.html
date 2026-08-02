@@ -2,202 +2,312 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Agents - Vấn đề hiện nay & Lưu dữ liệu Firebase</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AI Agents</title>
   <style>
     :root {
       --primary: #6366f1;
+      --primary-hover: #4f46e5;
       --bg: #0f172a;
       --card: #1e293b;
       --text: #e2e8f0;
       --muted: #94a3b8;
+      --border: #334155;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.5;
       min-height: 100vh;
+      padding-bottom: 2rem;
     }
-    .container { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
     header {
       text-align: center;
-      margin-bottom: 2.5rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid #334155;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
     }
-    h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #a5b4fc; }
-    .subtitle { color: var(--muted); }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.4rem;
+      color: #a5b4fc;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Auth Section UI Mobile Optimizations */
     .auth-section {
       background: var(--card);
       border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
+      padding: 1.25rem 1rem;
+      margin-bottom: 1.5rem;
       text-align: center;
+      border: 1px solid var(--border);
     }
+
+    .auth-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.25rem;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1rem;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      margin: 0.4rem;
-      transition: transform 0.15s, opacity 0.15s;
+      width: 100%;
+      min-height: 48px; /* Tối ưu Touch Target */
+      transition: background-color 0.2s, transform 0.1s;
     }
-    .btn:hover { transform: translateY(-2px); opacity: 0.95; }
-    .btn-google { background: #fff; color: #333; }
-    .btn-facebook { background: #1877f2; color: #fff; }
-    .btn-logout { background: #ef4444; color: #fff; }
-    .btn-save { background: var(--primary); color: #fff; width: 100%; }
-    .user-info { margin-top: 1rem; color: #a5b4fc; }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-google { background: #ffffff; color: #1f2937; }
+    .btn-facebook { background: #1877f2; color: #ffffff; }
+    .btn-logout { background: #ef4444; color: #ffffff; margin-top: 0.8rem; }
+    .btn-save { background: var(--primary); color: #ffffff; }
+
+    .user-info {
+      color: #a5b4fc;
+      font-size: 1rem;
+    }
+
+    /* Cards */
     .content-card {
       background: var(--card);
       border-radius: 12px;
-      padding: 1.75rem;
-      margin-bottom: 2rem;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
     }
-    .content-card h2 { color: #a5b4fc; margin-bottom: 1rem; font-size: 1.4rem; }
-    .content-card ul { padding-left: 1.4rem; margin: 1rem 0; }
-    .content-card li { margin-bottom: 0.6rem; }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.4rem; color: var(--muted); font-size: 0.9rem; }
-    input, textarea, select {
+
+    .content-card h2 {
+      color: #a5b4fc;
+      margin-bottom: 0.8rem;
+      font-size: 1.2rem;
+    }
+
+    .content-card ul {
+      padding-left: 1.2rem;
+      margin: 0.8rem 0;
+    }
+
+    .content-card li {
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Form Fields Mobile Fix (Font 16px tránh zoom iOS) */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    input, select, textarea {
       width: 100%;
-      padding: 0.75rem;
+      padding: 0.85rem;
       border-radius: 8px;
-      border: 1px solid #475569;
+      border: 1px solid var(--border);
       background: #0f172a;
       color: var(--text);
-      font-size: 1rem;
+      font-size: 16px; /* Chống auto-zoom Safari */
+      outline: none;
     }
-    textarea { min-height: 120px; resize: vertical; }
-    .data-list { margin-top: 1.5rem; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Data List */
+    .data-list {
+      margin-top: 1rem;
+    }
+
     .data-item {
       background: #0f172a;
       border-left: 4px solid var(--primary);
       padding: 1rem;
       border-radius: 0 8px 8px 0;
       margin-bottom: 0.8rem;
+      word-break: break-word;
     }
-    .data-item .meta { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; }
+
+    .data-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .badge {
+      background: #334155;
+      color: #94a3b8;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+
+    .data-item p {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+    }
+
+    .data-item .meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
     .hidden { display: none !important; }
-    .status { text-align: center; padding: 0.8rem; border-radius: 8px; margin: 1rem 0; }
+
+    .status {
+      text-align: center;
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
     .status.success { background: #065f46; color: #a7f3d0; }
     .status.error { background: #7f1d1d; color: #fecaca; }
+
+    @media (min-width: 640px) {
+      .container { padding: 2rem 1rem; }
+      h1 { font-size: 2rem; }
+      .auth-buttons { flex-direction: row; }
+      .btn { width: auto; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>🤖 AI Agents – Vấn đề hiện nay</h1>
-      <p class="subtitle">Tìm hiểu & đóng góp ý kiến về các thách thức của AI Agents</p>
+      <p class="subtitle">Tìm hiểu & đóng góp ý kiến cá nhân</p>
     </header>
 
     <!-- Auth Section -->
     <div class="auth-section" id="authSection">
-      <p id="loginPrompt">Đăng nhập để đóng góp dữ liệu mới</p>
-      <div id="loginButtons">
+      <p id="loginPrompt">Đăng nhập để lưu và quản lý dữ liệu cá nhân</p>
+      
+      <div id="loginButtons" class="auth-buttons">
         <button class="btn btn-google" id="btnGoogle">
           <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Đăng nhập Google
+          Google
         </button>
         <button class="btn btn-facebook" id="btnFacebook">
           <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-          Đăng nhập Facebook
+          Facebook
         </button>
       </div>
+
       <div id="userInfo" class="user-info hidden">
-        <p>Xin chào, <strong id="userName"></strong></p>
+        <p>Tài khoản: <strong id="userName"></strong></p>
         <button class="btn btn-logout" id="btnLogout">Đăng xuất</button>
       </div>
     </div>
 
-    <!-- Nội dung về AI Agents -->
+    <!-- Nội dung tổng quan -->
     <div class="content-card">
-      <h2>Các vấn đề lớn của AI Agents hiện nay</h2>
-      <p>
-        AI Agents (tác nhân AI tự chủ) đang phát triển rất nhanh, nhưng vẫn tồn tại nhiều thách thức quan trọng:
-      </p>
+      <h2>Thách thức chính của AI Agents</h2>
       <ul>
-        <li><strong>Hallucination &amp; độ tin cậy:</strong> Agent dễ bịa thông tin hoặc đưa ra kết luận sai khi dữ liệu không đầy đủ.</li>
-        <li><strong>Alignment &amp; kiểm soát:</strong> Khó đảm bảo agent luôn hành động đúng mục tiêu của con người, đặc biệt khi được quyền tự quyết cao.</li>
-        <li><strong>An toàn &amp; lạm dụng:</strong> Agent có thể bị lợi dụng để thực hiện hành vi độc hại (phishing, tấn động tự động, tấn công mạng…).</li>
-        <li><strong>Quyền riêng tư &amp; dữ liệu:</strong> Agent thường cần truy cập nhiều nguồn dữ liệu nhạy cảm, tăng rủi ro rò rỉ thông tin.</li>
-        <li><strong>Chi phí &amp; hiệu suất:</strong> Chạy nhiều bước suy luận + tool calling tốn kém token và latency cao.</li>
-        <li><strong>Tính minh bạch:</strong> Khó giải thích được tại sao agent đưa ra quyết định cụ thể (black-box).</li>
-        <li><strong>Phối hợp đa agent:</strong> Khi nhiều agent làm việc cùng nhau dễ xảy ra xung đột mục tiêu hoặc vòng lặp vô tận.</li>
+        <li><strong>Hallucination:</strong> Agent dễ bịa thông tin khi thiếu dữ liệu.</li>
+        <li><strong>Alignment:</strong> Khó kiểm soát agent hành động đúng ý muốn.</li>
+        <li><strong>An toàn:</strong> Rủi ro lạm dụng để tấn công tự động.</li>
+        <li><strong>Quyền riêng tư:</strong> Truy cập dữ liệu nhạy cảm làm tăng rò rỉ.</li>
+        <li><strong>Chi phí:</strong> Tốn kém token và độ trễ (latency) cao.</li>
       </ul>
-      <p style="margin-top:1rem;color:var(--muted);font-size:0.95rem">
-        Mẫu văn bản trên được dùng làm cơ sở. Bạn có thể thêm ý kiến / vấn đề mới sau khi đăng nhập.
-      </p>
     </div>
 
-    <!-- Form lưu dữ liệu (chỉ hiện khi đã login) -->
+    <!-- Form nhập liệu (Chỉ hiện khi Đã đăng nhập) -->
     <div class="content-card hidden" id="formSection">
-      <h2>Thêm vấn đề / ý kiến mới</h2>
+      <h2>Thêm ghi chú cá nhân</h2>
       <form id="dataForm">
         <div class="form-group">
           <label for="title">Tiêu đề vấn đề</label>
-          <input type="text" id="title" placeholder="Ví dụ: Rủi ro khi agent tự gọi API" required />
+          <input type="text" id="title" placeholder="Ví dụ: Rủi ro API key" required />
         </div>
+
         <div class="form-group">
           <label for="category">Danh mục</label>
           <select id="category">
-            <option value="Hallucination">Hallucination &amp; độ tin cậy</option>
-            <option value="Alignment">Alignment &amp; kiểm soát</option>
-            <option value="Safety">An toàn &amp; lạm dụng</option>
+            <option value="Hallucination">Hallucination & độ tin cậy</option>
+            <option value="Alignment">Alignment & kiểm soát</option>
+            <option value="Safety">An toàn & lạm dụng</option>
             <option value="Privacy">Quyền riêng tư</option>
-            <option value="Cost">Chi phí &amp; hiệu suất</option>
-            <option value="Transparency">Tính minh bạch</option>
-            <option value="Multi-Agent">Phối hợp đa agent</option>
+            <option value="Cost">Chi phí & hiệu suất</option>
             <option value="Other">Khác</option>
           </select>
         </div>
+
         <div class="form-group">
-          <label for="description">Mô tả chi tiết (dựa trên mẫu văn bản có sẵn)</label>
-          <textarea id="description" placeholder="Mô tả vấn đề, hậu quả, hoặc giải pháp đề xuất..." required></textarea>
+          <label for="description">Mô tả chi tiết</label>
+          <textarea id="description" placeholder="Nhập ghi chú hoặc giải pháp đề xuất..." required></textarea>
         </div>
-        <button type="submit" class="btn btn-save">Lưu vào Firebase</button>
+
+        <button type="submit" class="btn btn-save">Lưu vào Firebase (UID)</button>
       </form>
       <div id="statusMsg" class="status hidden"></div>
     </div>
 
-    <!-- Danh sách dữ liệu đã lưu -->
+    <!-- Danh sách dữ liệu cá nhân cá thể hóa theo UID -->
     <div class="content-card">
-      <h2>Dữ liệu đã đóng góp</h2>
+      <h2>Dữ liệu cá nhân đã lưu</h2>
       <div id="dataList" class="data-list">
-        <p style="color:var(--muted)">Đang tải...</p>
+        <p style="color:var(--muted)">Vui lòng đăng nhập để xem danh sách ghi chú của bạn.</p>
       </div>
     </div>
   </div>
 
-  <!-- Firebase SDKs (v10 modular via CDN) -->
+  <!-- Firebase v10 Modular SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
-    import {
-      getAuth,
-      GoogleAuthProvider,
-      FacebookAuthProvider,
-      signInWithPopup,
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-    import {
-      getDatabase,
-      ref,
-      push,
-      set,
-      onValue,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+    import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { getDatabase, ref, push, set, onValue, off } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
-    // Your web app's Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyASfKSM4k9PVqGSu2ycd5Uv1ax0vbScg0I",
       authDomain: "soloskill.firebaseapp.com",
@@ -205,20 +315,18 @@
       projectId: "soloskill",
       storageBucket: "soloskill.firebasestorage.app",
       messagingSenderId: "959816905162",
-      appId: "1:959816905162:web:fe1db8d86e63f23271df33",
-      measurementId: "G-Y1Z5HSRNZV"
+      appId: "1:959816905162:web:fe1db8d86e63f23271df33"
     };
 
-    // Initialize Firebase
+    // Khởi tạo Firebase
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
     const auth = getAuth(app);
     const db = getDatabase(app);
 
     const googleProvider = new GoogleAuthProvider();
     const facebookProvider = new FacebookAuthProvider();
 
-    // DOM elements
+    // DOM Elements
     const btnGoogle = document.getElementById("btnGoogle");
     const btnFacebook = document.getElementById("btnFacebook");
     const btnLogout = document.getElementById("btnLogout");
@@ -231,7 +339,9 @@
     const statusMsg = document.getElementById("statusMsg");
     const dataList = document.getElementById("dataList");
 
-    // Auth state
+    let activeDataRef = null;
+
+    // Theo dõi trạng thái đăng nhập
     onAuthStateChanged(auth, (user) => {
       if (user) {
         loginButtons.classList.add("hidden");
@@ -239,15 +349,23 @@
         userInfo.classList.remove("hidden");
         formSection.classList.remove("hidden");
         userName.textContent = user.displayName || user.email || "Người dùng";
+
+        // Tải dữ liệu lưu riêng theo UID của người dùng
+        loadUserData(user.uid);
       } else {
         loginButtons.classList.remove("hidden");
         loginPrompt.classList.remove("hidden");
         userInfo.classList.add("hidden");
         formSection.classList.add("hidden");
+
+        if (activeDataRef) {
+          off(activeDataRef); // Ngắt kết nối realtime khi logout
+        }
+        dataList.innerHTML = `<p style="color:var(--muted)">Vui lòng đăng nhập để xem danh sách ghi chú của bạn.</p>`;
       }
     });
 
-    // Login handlers
+    // Sự kiện Đăng nhập / Đăng xuất
     btnGoogle.addEventListener("click", async () => {
       try {
         await signInWithPopup(auth, googleProvider);
@@ -266,7 +384,7 @@
 
     btnLogout.addEventListener("click", () => signOut(auth));
 
-    // Save data
+    // Lưu dữ liệu vào đường dẫn: users/{uid}/ai_agent_issues
     dataForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const user = auth.currentUser;
@@ -283,46 +401,53 @@
         title,
         category,
         description,
-        author: user.displayName || user.email,
-        uid: user.uid,
-        createdAt: serverTimestamp()
+        createdAt: Date.now()
       };
 
       try {
-        const newRef = push(ref(db, "ai_agent_issues"));
+        // Đường dẫn chuẩn hóa theo UID người dùng
+        const userIssuesRef = ref(db, `users/${user.uid}/ai_agent_issues`);
+        const newRef = push(userIssuesRef);
         await set(newRef, newData);
-        showStatus("✅ Đã lưu thành công vào Firebase!", true);
+
+        showStatus("✅ Đã lưu vào tài khoản của bạn!", true);
         dataForm.reset();
       } catch (err) {
         showStatus("Lỗi lưu dữ liệu: " + err.message, false);
       }
     });
 
-    // Load data realtime
-    const issuesRef = ref(db, "ai_agent_issues");
-    onValue(issuesRef, (snapshot) => {
-      const data = snapshot.val();
-      if (!data) {
-        dataList.innerHTML = `<p style="color:var(--muted)">Chưa có dữ liệu nào. Hãy đăng nhập và thêm vấn đề đầu tiên!</p>`;
-        return;
-      }
+    // Lắng nghe dữ liệu theo Realtime dựa vào UID
+    function loadUserData(uid) {
+      activeDataRef = ref(db, `users/${uid}/ai_agent_issues`);
+      
+      onValue(activeDataRef, (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+          dataList.innerHTML = `<p style="color:var(--muted)">Chưa có ghi chú nào trong tài khoản này. Hãy thêm mới!</p>`;
+          return;
+        }
 
-      const items = Object.entries(data)
-        .map(([id, item]) => ({ id, ...item }))
-        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        const items = Object.entries(data)
+          .map(([id, item]) => ({ id, ...item }))
+          .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-      dataList.innerHTML = items.map(item => `
-        <div class="data-item">
-          <strong>${escapeHtml(item.title)}</strong>
-          <span style="background:#334155;padding:2px 8px;border-radius:4px;font-size:0.75rem;margin-left:8px">${escapeHtml(item.category)}</span>
-          <p style="margin-top:0.5rem">${escapeHtml(item.description)}</p>
-          <div class="meta">
-            bởi ${escapeHtml(item.author || "Ẩn danh")} • ${formatTime(item.createdAt)}
+        dataList.innerHTML = items.map(item => `
+          <div class="data-item">
+            <div class="data-header">
+              <strong>${escapeHtml(item.title)}</strong>
+              <span class="badge">${escapeHtml(item.category)}</span>
+            </div>
+            <p>${escapeHtml(item.description)}</p>
+            <div class="meta">
+              Thời gian: ${formatTime(item.createdAt)}
+            </div>
           </div>
-        </div>
-      `).join("");
-    });
+        `).join("");
+      });
+    }
 
+    // Helper functions
     function showStatus(msg, success) {
       statusMsg.textContent = msg;
       statusMsg.className = "status " + (success ? "success" : "error");
@@ -339,8 +464,7 @@
 
     function formatTime(ts) {
       if (!ts) return "vừa xong";
-      const d = new Date(ts);
-      return d.toLocaleString("vi-VN");
+      return new Date(ts).toLocaleString("vi-VN");
     }
   </script>
 </body>
